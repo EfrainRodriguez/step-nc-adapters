@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <PlatformTarget>x64</PlatformTarget>
+    <AssemblyName>StepNc.Adapters</AssemblyName>
+    <RootNamespace>StepNc.Adapters</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="stepnc_x64">
+      <HintPath>C:\Program Files (x86)\STEP Tools\STEP-NC Machine Personal Edition\stepnc_x64.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>
