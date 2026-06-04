@@ -34,6 +34,30 @@ public static class StepNcApi
         return AdditiveStepNcGenerator.GenerateFromLayers(parsed.Layers, outputPath, options);
     }
 
+    public static AdditiveJsonParseResult ParseAdditiveJson(string inputJsonPath)
+    {
+        return AdditiveJsonParser.ParseFile(inputJsonPath);
+    }
+
+    public static StepNcResult ConvertAdditiveJsonToStepNc(
+        string inputJsonPath,
+        string outputPath,
+        AdditiveJsonConversionOptions options = null)
+    {
+        var parsed = AdditiveJsonParser.ParseFile(inputJsonPath);
+        if (!parsed.Success)
+        {
+            return new StepNcResult
+            {
+                Success = false,
+                OutputPath = outputPath,
+                Message = parsed.Message
+            };
+        }
+
+        return AdditiveJsonStepNcGenerator.GenerateFromProgram(parsed.Program, outputPath, options);
+    }
+
     public static AptParseResult ParseMastercamApt(string inputAptPath)
     {
         return AptParser.ParseMastercamFile(inputAptPath);

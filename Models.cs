@@ -55,6 +55,95 @@ public sealed class AdditiveParseResult
     public int PointCount { get; init; }
 }
 
+public sealed class AdditiveJsonConversionOptions
+{
+    public string ProjectName { get; init; } = "JSON Additive Manufacturing STEP-NC";
+    public int ContextId { get; init; } = 1;
+    public string MainWorkplanName { get; init; } = "Main JSON Additive Workplan";
+    public bool SaveAsP21 { get; init; } = true;
+    public double DefaultFeedrate { get; init; } = 1600.0;
+    public double DefaultSpindleSpeed { get; init; } = 0.0;
+    public double DefaultNozzleDiameter { get; init; } = 0.5;
+    public bool EmitTravels { get; init; } = true;
+    public bool EmitSkirtAndBrim { get; init; } = true;
+    public bool AddWorkingstepProperties { get; init; } = true;
+    public bool UseVolumetricFlowAsSpindle { get; init; } = true;
+    public bool ApplyCopyOffset { get; init; } = false;
+}
+
+public sealed class AdditiveJsonParseResult
+{
+    public bool Success { get; init; }
+    public string Message { get; init; } = string.Empty;
+    public AdditiveJsonProgram Program { get; init; }
+    public int LayerCount { get; init; }
+    public int EventCount { get; init; }
+    public int ExtrusionEventCount { get; init; }
+    public int TravelEventCount { get; init; }
+    public int PointCount { get; init; }
+}
+
+public sealed class AdditiveJsonProgram
+{
+    public string SchemaVersion { get; init; } = string.Empty;
+    public string GeneratorName { get; init; } = string.Empty;
+    public string GeneratorVersion { get; init; } = string.Empty;
+    public IReadOnlyDictionary<string, string> PrintConfig { get; init; } = new Dictionary<string, string>();
+    public IReadOnlyList<AdditiveJsonLayer> Layers { get; init; } = Array.Empty<AdditiveJsonLayer>();
+    public IReadOnlyList<AdditiveJsonPath> SkirtPaths { get; init; } = Array.Empty<AdditiveJsonPath>();
+    public IReadOnlyList<AdditiveJsonPath> BrimPaths { get; init; } = Array.Empty<AdditiveJsonPath>();
+}
+
+public sealed class AdditiveJsonLayer
+{
+    public int LayerId { get; init; }
+    public int LayerSeqId { get; init; }
+    public int ObjectIndex { get; init; }
+    public int CopyIndex { get; init; }
+    public double CopyOffsetX { get; init; }
+    public double CopyOffsetY { get; init; }
+    public double PrintZ { get; init; }
+    public double Height { get; init; }
+    public bool IsRaftLayer { get; init; }
+    public bool IsSupportLayer { get; init; }
+    public IReadOnlyDictionary<string, string> Process { get; init; } = new Dictionary<string, string>();
+    public IReadOnlyDictionary<string, string> RegionConfig { get; init; } = new Dictionary<string, string>();
+    public IReadOnlyList<AdditiveJsonEvent> Events { get; init; } = Array.Empty<AdditiveJsonEvent>();
+}
+
+public sealed class AdditiveJsonEvent
+{
+    public int EventIndex { get; init; }
+    public string Type { get; init; } = string.Empty;
+    public string FeatureType { get; init; } = string.Empty;
+    public string RoleName { get; init; } = string.Empty;
+    public string Source { get; init; } = string.Empty;
+    public int? RoleId { get; init; }
+    public int? RegionId { get; init; }
+    public double LayerPrintZ { get; init; }
+    public double Height { get; init; }
+    public double? Width { get; init; }
+    public double? Mm3PerMm { get; init; }
+    public bool IsBridge { get; init; }
+    public bool IsSolidInfill { get; init; }
+    public IReadOnlyList<ToolpathPoint> Points { get; init; } = Array.Empty<ToolpathPoint>();
+
+    public bool IsTravel => string.Equals(Type, "travel", StringComparison.OrdinalIgnoreCase)
+        || string.Equals(FeatureType, "travel", StringComparison.OrdinalIgnoreCase);
+
+    public bool IsExtrusion => string.Equals(Type, "extrusion_path", StringComparison.OrdinalIgnoreCase) && !IsTravel;
+}
+
+public sealed class AdditiveJsonPath
+{
+    public int PathIndex { get; init; }
+    public string Type { get; init; } = string.Empty;
+    public string FeatureType { get; init; } = string.Empty;
+    public string RoleName { get; init; } = string.Empty;
+    public double LayerPrintZ { get; init; }
+    public IReadOnlyList<ToolpathPoint> Points { get; init; } = Array.Empty<ToolpathPoint>();
+}
+
 public sealed class AptConversionOptions
 {
     public bool SaveAsP21 { get; init; } = true;
